@@ -3,101 +3,90 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_variants/flutter_variants.dart';
 
 void main() {
-  group('parseRemoteNode', () {
-    test('parses a text schema into a RemoteNode', () {
-      final node = parseRemoteNode({
-        'type': 'text',
-        'value': 'Hello',
-      });
-
-      expect(node.type, 'text');
-      expect(node.props['value'], 'Hello');
-      expect(node.children, isEmpty);
-    });
-
-    test('parses child schemas recursively', () {
-      final node = parseRemoteNode({
-        'type': 'column',
-        'children': [
-          {
-            'type': 'text',
-            'value': 'Hello',
-          },
-          {
-            'type': 'text',
-            'value': 'World',
-          },
-        ],
-      });
-
-      expect(node.type, 'column');
-      expect(node.children, hasLength(2));
-      expect(node.children[0].type, 'text');
-      expect(node.children[0].props['value'], 'Hello');
-      expect(node.children[1].type, 'text');
-      expect(node.children[1].props['value'], 'World');
-    });
-  });
-
-  group('RemoteRenderer', () {
-    testWidgets('renders a text schema', (tester) async {
+  group('RemoteText', () {
+    testWidgets('renders its fallback without a variant scope', (tester) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: RemoteRenderer(
-            schema: {
-              'type': 'text',
-              'value': 'Hello',
+          child: RemoteText(id: 'home.title', fallback: 'Welcome'),
+        ),
+      );
+
+      expect(find.text('Welcome'), findsOneWidget);
+    });
+
+    testWidgets('renders a remote text value from the variant scope', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: RemoteVariantScope(
+            values: {
+              'home.title': {'type': 'text', 'value': 'Try the new onboarding'},
             },
+            child: RemoteText(id: 'home.title', fallback: 'Welcome'),
           ),
         ),
       );
 
-      expect(find.text('Hello'), findsOneWidget);
+      expect(find.text('Try the new onboarding'), findsOneWidget);
+      expect(find.text('Welcome'), findsNothing);
     });
 
-    testWidgets('renders a column schema with text children', (tester) async {
+    testWidgets('uses fallback when the remote value is missing', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: RemoteRenderer(
-            schema: {
-              'type': 'column',
-              'children': [
-                {
-                  'type': 'text',
-                  'value': 'Hello',
-                },
-                {
-                  'type': 'text',
-                  'value': 'World',
-                },
-              ],
-            },
+          child: RemoteVariantScope(
+            values: {},
+            child: RemoteText(id: 'home.title', fallback: 'Welcome'),
           ),
         ),
       );
 
-      expect(find.byType(Column), findsOneWidget);
-      expect(find.text('Hello'), findsOneWidget);
-      expect(find.text('World'), findsOneWidget);
+      expect(find.text('Welcome'), findsOneWidget);
     });
 
-    testWidgets('falls back safely for an unknown widget type', (tester) async {
+    testWidgets('uses fallback when the remote value has the wrong type', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const Directionality(
           textDirection: TextDirection.ltr,
-          child: RemoteRenderer(
-            schema: {
-              'type': 'unknown_widget',
+          child: RemoteVariantScope(
+            values: {
+              'home.title': {
+                'type': 'image',
+                'value': 'https://example.com/image.png',
+              },
             },
+            child: RemoteText(id: 'home.title', fallback: 'Welcome'),
           ),
         ),
       );
 
-      expect(find.byType(UnknownWidgetFallback), findsOneWidget);
-      expect(find.text('Unknown remote widget: unknown_widget'), findsOneWidget);
-      expect(tester.takeException(), isNull);
+      expect(find.text('Welcome'), findsOneWidget);
+    });
+
+    testWidgets('uses fallback when the remote text value is not a string', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.ltr,
+          child: RemoteVariantScope(
+            values: {
+              'home.title': {'type': 'text', 'value': 123},
+            },
+            child: RemoteText(id: 'home.title', fallback: 'Welcome'),
+          ),
+        ),
+      );
+
+      expect(find.text('Welcome'), findsOneWidget);
     });
   });
 }

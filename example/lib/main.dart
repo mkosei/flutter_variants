@@ -23,29 +23,47 @@ class DemoApp extends StatelessWidget {
 class DemoHomePage extends StatelessWidget {
   const DemoHomePage({super.key});
 
-  static const schema = {
-    'type': 'column',
-    'children': [
-      {
-        'type': 'text',
-        'value': 'Variant A',
-      },
-      {
-        'type': 'text',
-        'value': 'Rendered from remote schema',
-      },
-    ],
+  static const variantValues = {
+    'example.variant_title': {'type': 'text', 'value': 'Variant A'},
+    'example.variant_body': {
+      'type': 'text',
+      'value': 'Rendered from a remote text slot',
+    },
+    'example.cta_label': {'type': 'text', 'value': 'Start now'},
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Variants Demo'),
-      ),
+      appBar: AppBar(title: const Text('Flutter Variants Demo')),
       body: const Padding(
         padding: EdgeInsets.all(24),
-        child: RemoteRenderer(schema: schema),
+        child: RemoteVariantScope(
+          values: variantValues,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RemoteText(
+                id: 'example.variant_title',
+                fallback: 'Default title',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8),
+              RemoteText(
+                id: 'example.variant_body',
+                fallback: 'Default body copy',
+              ),
+              SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: null,
+                child: RemoteText(
+                  id: 'example.cta_label',
+                  fallback: 'Continue',
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
