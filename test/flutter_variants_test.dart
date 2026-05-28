@@ -95,7 +95,8 @@ void main() {
         ),
       );
 
-      expect(find.byType(SizedBox), findsOneWidget);
+      expect(find.byType(UnknownWidgetFallback), findsOneWidget);
+      expect(find.text('Unknown remote widget: unknown_widget'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   });
