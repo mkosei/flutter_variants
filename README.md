@@ -1,40 +1,126 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# flutter_variants
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+A Flutter SDK for safe remote UI variants.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+`flutter_variants` lets you change approved UI values such as text, labels, and
+design copy without shipping a new app release. The app keeps ownership of
+layout, navigation, callbacks, API calls, payments, authentication, and business
+logic.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This is not a server-driven UI renderer. It is a small remote slot system for
+Flutter apps.
 
-## Features
+## Philosophy
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+Remote data may change presentation values:
 
-## Getting started
+- Text
+- CTA labels
+- Image references
+- Colors
+- Spacing
+- Design variants
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Remote data must not define behavior:
 
-## Usage
+- No remote code execution
+- No remote button logic
+- No remote navigation logic
+- No remote API calls
+- No remote payment/auth/business rules
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Flutter code owns behavior. Remote values only fill approved slots.
+
+## Example
 
 ```dart
-const like = 'sample';
+RemoteVariantScope(
+  values: {
+    'home.title': {
+      'type': 'text',
+      'value': 'Try the new onboarding',
+    },
+    'home.cta.label': {
+      'type': 'text',
+      'value': 'Start now',
+    },
+  },
+  child: Column(
+    children: [
+      const RemoteText(
+        id: 'home.title',
+        fallback: 'Welcome',
+      ),
+      ElevatedButton(
+        onPressed: onContinue,
+        child: const RemoteText(
+          id: 'home.cta.label',
+          fallback: 'Continue',
+        ),
+      ),
+    ],
+  ),
+)
 ```
 
-## Additional information
+The server can change `home.title` and `home.cta.label`. It cannot change
+`onContinue`.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
-# flutter_variants
+## Current API
+
+### `RemoteVariantScope`
+
+Provides remote variant values to the widgets below it.
+
+```dart
+RemoteVariantScope(
+  values: {
+    'slot.id': {
+      'type': 'text',
+      'value': 'Remote value',
+    },
+  },
+  child: child,
+)
+```
+
+### `RemoteText`
+
+Reads a text value by `id` and renders a local fallback when the value is
+missing or invalid.
+
+```dart
+const RemoteText(
+  id: 'home.hero.title',
+  fallback: 'Welcome',
+)
+```
+
+## Why Slots Instead Of Full Remote Rendering?
+
+Full server-driven UI can become risky because it can drift toward remote
+behavior changes. This package intentionally keeps the Flutter layout and app
+logic native.
+
+The goal is:
+
+```txt
+Remote values change
+-> Approved Flutter slots update
+-> App behavior stays native
+```
+
+## Running The Example
+
+```sh
+cd example
+fvm flutter run
+```
+
+## Running Tests
+
+```sh
+fvm flutter test
+cd example
+fvm flutter test
+```
