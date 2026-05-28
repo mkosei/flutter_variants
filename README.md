@@ -1,18 +1,18 @@
 # flutter_variants
 
-A Flutter SDK for safe remote UI variants.
+A Flutter SDK for safe UI variants.
 
 `flutter_variants` lets you change approved UI values such as text, labels, and
 design copy without shipping a new app release. The app keeps ownership of
 layout, navigation, callbacks, API calls, payments, authentication, and business
 logic.
 
-This is not a server-driven UI renderer. It is a small remote slot system for
+This is not a server-driven UI renderer. It is a small variant slot system for
 Flutter apps.
 
 ## Philosophy
 
-Remote data may change presentation values:
+Variant data may change presentation values:
 
 - Text
 - CTA labels
@@ -21,20 +21,20 @@ Remote data may change presentation values:
 - Spacing
 - Design variants
 
-Remote data must not define behavior:
+Variant data must not define behavior:
 
-- No remote code execution
-- No remote button logic
-- No remote navigation logic
-- No remote API calls
-- No remote payment/auth/business rules
+- No server-defined code execution
+- No server-defined button logic
+- No server-defined navigation logic
+- No server-defined API calls
+- No server-defined payment/auth/business rules
 
-Flutter code owns behavior. Remote values only fill approved slots.
+Flutter code owns behavior. Variant values only fill approved slots.
 
 ## Example
 
 ```dart
-RemoteVariantScope(
+VariantScope(
   values: {
     'home.title': {
       'type': 'text',
@@ -47,13 +47,13 @@ RemoteVariantScope(
   },
   child: Column(
     children: [
-      const RemoteText(
+      const VariantText(
         id: 'home.title',
         fallback: 'Welcome',
       ),
       ElevatedButton(
         onPressed: onContinue,
-        child: const RemoteText(
+        child: const VariantText(
           id: 'home.cta.label',
           fallback: 'Continue',
         ),
@@ -68,44 +68,44 @@ The server can change `home.title` and `home.cta.label`. It cannot change
 
 ## Current API
 
-### `RemoteVariantScope`
+### `VariantScope`
 
-Provides remote variant values to the widgets below it.
+Provides variant values to the widgets below it.
 
 ```dart
-RemoteVariantScope(
+VariantScope(
   values: {
     'slot.id': {
       'type': 'text',
-      'value': 'Remote value',
+      'value': 'Variant value',
     },
   },
   child: child,
 )
 ```
 
-### `RemoteText`
+### `VariantText`
 
 Reads a text value by `id` and renders a local fallback when the value is
 missing or invalid.
 
 ```dart
-const RemoteText(
+const VariantText(
   id: 'home.hero.title',
   fallback: 'Welcome',
 )
 ```
 
-## Why Slots Instead Of Full Remote Rendering?
+## Why Slots Instead Of Full Variant Rendering?
 
-Full server-driven UI can become risky because it can drift toward remote
+Full server-driven UI can become risky because it can drift toward server-defined
 behavior changes. This package intentionally keeps the Flutter layout and app
 logic native.
 
 The goal is:
 
 ```txt
-Remote values change
+Variant values change
 -> Approved Flutter slots update
 -> App behavior stays native
 ```

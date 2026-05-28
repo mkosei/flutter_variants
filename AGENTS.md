@@ -2,24 +2,24 @@
 
 ## Purpose
 
-This repository builds a Flutter SDK for remotely delivered UI variants.
+This repository builds a Flutter SDK for server-delivered UI variants.
 
 The product goal is to let teams change copy, visual presentation, campaign
 content, CTA labels, images, colors, spacing, and other design-level details
 without waiting for an App Store or Play Store release.
 
-This project is Remote UI, not Remote Logic. Flutter app code owns layout,
+This project is Variant UI, not Variant Logic. Flutter app code owns layout,
 navigation, button callbacks, authentication, payments, permissions, network
 calls, and business behavior.
 
 ## Product Model
 
-The primary API should be small remote slots embedded inside native Flutter UI.
+The primary API should be small variant slots embedded inside native Flutter UI.
 
 Example:
 
 ```dart
-RemoteText(
+VariantText(
   id: 'home.hero.title',
   fallback: 'Welcome',
 )
@@ -30,13 +30,13 @@ The Flutter screen structure remains native:
 ```dart
 Column(
   children: [
-    RemoteText(
+    VariantText(
       id: 'home.hero.title',
       fallback: 'Welcome',
     ),
     ElevatedButton(
       onPressed: onContinue,
-      child: RemoteText(
+      child: VariantText(
         id: 'home.cta.label',
         fallback: 'Continue',
       ),
@@ -50,15 +50,16 @@ The server may change the text values for `home.hero.title` and
 
 ## Core Principle
 
-Do not build Remote Flutter.
+Do not build Variant Flutter.
 
-Do not build a full-screen remote renderer as the primary product surface.
+Do not build a full-screen server-driven renderer as the primary product
+surface.
 
-Build constrained remote design slots. The native Flutter app should define the
-screen structure and behavior; remote data should fill approved presentation
+Build constrained variant design slots. The native Flutter app should define the
+screen structure and behavior; variant data should fill approved presentation
 slots.
 
-## What Remote Data May Control
+## What Variant Data May Control
 
 - Text values
 - Image URLs or asset references
@@ -69,7 +70,7 @@ slots.
 - CTA labels
 - Design variants for predefined slots
 
-## What Remote Data Must Not Control
+## What Variant Data Must Not Control
 
 - Arbitrary Dart, JavaScript, expressions, or scripts
 - API endpoints or HTTP requests
@@ -82,7 +83,7 @@ slots.
 - Business rules
 - Experiment assignment logic inside the runtime
 
-If interactions are added later, remote data may only reference native-defined
+If interactions are added later, variant data may only reference native-defined
 action slots. The app owns the behavior; the server may only choose approved
 action identifiers.
 
@@ -100,22 +101,22 @@ This can change a button label. It cannot change `onPressed`.
 
 ## Phase 1 Scope
 
-Phase 1 focuses on small remote components and variant value delivery.
+Phase 1 focuses on small variant components and variant value delivery.
 
 Build:
 
-- Remote slot identifiers
-- Remote value lookup
+- Variant slot identifiers
+- Variant value lookup
 - Safe fallback values
-- Small remote widgets such as `RemoteText`
-- Tests for missing, invalid, and valid remote values
+- Small variant widgets such as `VariantText`
+- Tests for missing, invalid, and valid variant values
 - Example usage inside a normal native Flutter layout
 
 Do not build yet:
 
 - Full-screen schema rendering
 - Runtime logic execution
-- Remote-defined actions
+- Variant-defined actions
 - AB test assignment
 - Analytics
 - Experiment dashboards
@@ -125,21 +126,21 @@ Do not build yet:
 - Navigation runtime
 - Forms runtime
 - Permissions
-- Remote business rules
+- Variant business rules
 
 ## MVP Target
 
 The first stable API should look like this:
 
 ```dart
-RemoteVariantScope(
+VariantScope(
   values: {
     'home.hero.title': {
       'type': 'text',
       'value': 'Try the new onboarding',
     },
   },
-  child: RemoteText(
+  child: VariantText(
     id: 'home.hero.title',
     fallback: 'Welcome',
   ),
@@ -164,9 +165,9 @@ lib/
   flutter_variants.dart
   src/
     core/
-      remote_variant_scope.dart
+      variant_scope.dart
     widgets/
-      remote_text.dart
+      variant_text.dart
 ```
 
 Future areas may be added when needed:
@@ -179,20 +180,20 @@ src/
   analytics/
 ```
 
-Keep the runtime narrow. Prefer explicit slot widgets over generic remote
+Keep the runtime narrow. Prefer explicit slot widgets over generic variant
 rendering.
 
 ## Error Handling
 
-Remote data must never crash the app.
+Variant data must never crash the app.
 
-If a remote value is missing, malformed, or has the wrong type, the widget must
+If a variant value is missing, malformed, or has the wrong type, the widget must
 render its local fallback.
 
 Example:
 
 ```dart
-RemoteText(
+VariantText(
   id: 'home.title',
   fallback: 'Welcome',
 )
@@ -221,15 +222,15 @@ safe and constrained.
 
 When working in this repository:
 
-- Treat remote design variants as the product goal.
+- Treat design variants as the product goal.
 - Prefer small slot widgets over full-screen schema rendering.
 - Keep native Flutter code responsible for layout structure and behavior.
-- Preserve app stability when remote input is missing or invalid.
-- Always provide local fallback values for remote slots.
+- Preserve app stability when variant input is missing or invalid.
+- Always provide local fallback values for variant slots.
 - Do not introduce runtime logic execution.
-- Do not let remote data define button behavior, network calls, business rules,
+- Do not let variant data define button behavior, network calls, business rules,
   permissions, payments, authentication, or navigation behavior.
 - If actions are needed, model them as references to native-defined action
-  slots, not as remote-defined logic.
+  slots, not as server-defined logic.
 - Add tests around fallback behavior, valid values, invalid values, and example
   usage.

@@ -27,7 +27,7 @@ class DemoHomePage extends StatelessWidget {
     'example.variant_title': {'type': 'text', 'value': 'Variant A'},
     'example.variant_body': {
       'type': 'text',
-      'value': 'Rendered from a remote text slot',
+      'value': 'Rendered from a variant text slot',
     },
     'example.cta_label': {'type': 'text', 'value': 'Start now'},
   };
@@ -38,25 +38,25 @@ class DemoHomePage extends StatelessWidget {
       appBar: AppBar(title: const Text('Flutter Variants Demo')),
       body: const Padding(
         padding: EdgeInsets.all(24),
-        child: RemoteVariantScope(
+        child: VariantScope(
           values: variantValues,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RemoteText(
+              VariantText(
                 id: 'example.variant_title',
                 fallback: 'Default title',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              RemoteText(
+              VariantText(
                 id: 'example.variant_body',
                 fallback: 'Default body copy',
               ),
               SizedBox(height: 24),
               ElevatedButton(
                 onPressed: null,
-                child: RemoteText(
+                child: VariantText(
                   id: 'example.cta_label',
                   fallback: 'Continue',
                 ),
