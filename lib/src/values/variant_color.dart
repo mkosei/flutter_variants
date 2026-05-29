@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../core/variant_scope.dart';
 
 class VariantColor {
