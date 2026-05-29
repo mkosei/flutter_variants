@@ -30,36 +30,51 @@ class DemoHomePage extends StatelessWidget {
       'value': 'Rendered from a variant text slot',
     },
     'example.cta_label': {'type': 'text', 'value': 'Start now'},
+    'example.cta_background': {'type': 'color', 'value': '#FF3366'},
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Variants Demo')),
-      body: const Padding(
-        padding: EdgeInsets.all(24),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
         child: VariantScope(
           values: variantValues,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              VariantText(
+              const VariantText(
                 id: 'example.variant_title',
                 fallback: 'Default title',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
-              VariantText(
+              const SizedBox(height: 8),
+              const VariantText(
                 id: 'example.variant_body',
                 fallback: 'Default body copy',
               ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: null,
-                child: VariantText(
-                  id: 'example.cta_label',
-                  fallback: 'Continue',
-                ),
+              const SizedBox(height: 24),
+              Builder(
+                builder: (context) {
+                  final backgroundColor = VariantColor.of(
+                    context,
+                    id: 'example.cta_background',
+                    fallback: Colors.indigo,
+                  );
+
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: backgroundColor,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: null,
+                    child: const VariantText(
+                      id: 'example.cta_label',
+                      fallback: 'Continue',
+                    ),
+                  );
+                },
               ),
             ],
           ),
