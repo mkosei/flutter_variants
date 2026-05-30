@@ -47,4 +47,62 @@ void main() {
       expect(values['home.title']?['value'], 'Welcome');
     });
   });
+
+  group('parseVariantValuesWithIssues', () {
+    test('returns values and no issues for valid entries', () {
+      final result = parseVariantValuesWithIssues({
+        'home.title': {'type': 'text', 'value': 'Welcome'},
+        'home.visible': {'type': 'bool', 'value': true},
+      });
+
+      expect(result.values, {
+        'home.title': {'type': 'text', 'value': 'Welcome'},
+        'home.visible': {'type': 'bool', 'value': true},
+      });
+      expect(result.issues, isEmpty);
+    });
+
+    test('reports an invalid root issue', () {
+      final result = parseVariantValuesWithIssues('invalid');
+
+      expect(result.values, isEmpty);
+      expect(result.issues, hasLength(1));
+      expect(result.issues.single.code, VariantParseIssueCode.invalidRoot);
+      expect(result.issues.single.id, isNull);
+    });
+
+    test('reports invalid entry issues', () {
+      final result = parseVariantValuesWithIssues({
+        123: {'type': 'text', 'value': 'Invalid id'},
+        'invalid.value': 'not a map',
+        'missing.type': {'value': 'Missing type'},
+        'invalid.type': {'type': 123, 'value': 'Invalid type'},
+      });
+
+      expect(result.values, isEmpty);
+      expect(result.issues.map((issue) => issue.code), [
+        VariantParseIssueCode.invalidId,
+        VariantParseIssueCode.invalidValue,
+        VariantParseIssueCode.missingType,
+        VariantParseIssueCode.invalidType,
+      ]);
+      expect(result.issues.map((issue) => issue.id), [
+        123,
+        'invalid.value',
+        'missing.type',
+        'invalid.type',
+      ]);
+    });
+
+    test('reports non-string field keys without throwing', () {
+      final result = parseVariantValuesWithIssues({
+        'invalid.field': {'type': 'text', 123: 'Invalid field key'},
+      });
+
+      expect(result.values, isEmpty);
+      expect(result.issues, hasLength(1));
+      expect(result.issues.single.code, VariantParseIssueCode.invalidFieldKey);
+      expect(result.issues.single.id, 'invalid.field');
+    });
+  });
 }
