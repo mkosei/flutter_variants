@@ -238,6 +238,7 @@ VariantHost(
   onLoadError: (error, stackTrace) {
     // 必要ならerrorを記録する。UIはlocal fallbackのまま動く。
   },
+  onInvalidEntry: (issue) {}, // 任意: 不正なentryを検知したい場合に使う。
   child: const App(),
 )
 ```

@@ -90,6 +90,84 @@ void main() {
       });
     });
 
+    testWidgets('calls onInvalidEntry for parse issues', (tester) async {
+      final completer = Completer<VariantLoadResult>();
+      final issues = <VariantParseIssue>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            loader: (_) => completer.future,
+            onInvalidEntry: issues.add,
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      completer.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Loaded'},
+          },
+          issues: [
+            VariantParseIssue(
+              code: VariantParseIssueCode.invalidType,
+              id: 'home.invalid',
+              message: 'Invalid type',
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      expect(issues, hasLength(1));
+      expect(issues.single.code, VariantParseIssueCode.invalidType);
+      expect(issues.single.id, 'home.invalid');
+    });
+
+    testWidgets('calls onInvalidEntry for each parse issue', (tester) async {
+      final completer = Completer<VariantLoadResult>();
+      final issues = <VariantParseIssue>[];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            loader: (_) => completer.future,
+            onInvalidEntry: issues.add,
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      completer.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Loaded'},
+          },
+          issues: [
+            VariantParseIssue(
+              code: VariantParseIssueCode.invalidValue,
+              id: 'home.invalid_value',
+              message: 'Invalid value',
+            ),
+            VariantParseIssue(
+              code: VariantParseIssueCode.missingType,
+              id: 'home.missing_type',
+              message: 'Missing type',
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      expect(issues.map((issue) => issue.code), [
+        VariantParseIssueCode.invalidValue,
+        VariantParseIssueCode.missingType,
+      ]);
+    });
+
     testWidgets('keeps fallback values when loading fails', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -205,6 +283,76 @@ void main() {
 
       expect(find.text('Second'), findsOneWidget);
       expect(find.text('First'), findsNothing);
+    });
+
+    testWidgets('does not report issues from stale load results', (
+      tester,
+    ) async {
+      final first = Completer<VariantLoadResult>();
+      final second = Completer<VariantLoadResult>();
+      final issues = <VariantParseIssue>[];
+      var url = Uri.parse('https://example.com/first.json');
+
+      Future<VariantLoadResult> loader(Uri requestedUrl) {
+        if (requestedUrl.path.endsWith('first.json')) {
+          return first.future;
+        }
+
+        return second.future;
+      }
+
+      Widget build() {
+        return MaterialApp(
+          home: VariantHost(
+            url: url,
+            loader: loader,
+            onInvalidEntry: issues.add,
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(build());
+
+      url = Uri.parse('https://example.com/second.json');
+      await tester.pumpWidget(build());
+
+      first.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'First'},
+          },
+          issues: [
+            VariantParseIssue(
+              code: VariantParseIssueCode.invalidType,
+              id: 'home.stale',
+              message: 'Stale issue',
+            ),
+          ],
+        ),
+      );
+      await tester.pump();
+
+      expect(issues, isEmpty);
+
+      second.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Second'},
+          },
+          issues: [
+            VariantParseIssue(
+              code: VariantParseIssueCode.invalidValue,
+              id: 'home.current',
+              message: 'Current issue',
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(issues, hasLength(1));
+      expect(issues.single.id, 'home.current');
     });
 
     testWidgets('renders cached values before loaded values arrive', (

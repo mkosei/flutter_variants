@@ -2,12 +2,15 @@ import 'package:flutter/widgets.dart';
 
 import '../loader/variant_values_loader.dart';
 import '../loader/variant_values_memory_cache.dart';
+import '../loader/variant_values_parser.dart';
 import 'variant_scope.dart';
 
 typedef VariantHostLoader = Future<VariantLoadResult> Function(Uri url);
 typedef VariantHostLoadedCallback = void Function(VariantValues values);
 typedef VariantHostLoadErrorCallback =
     void Function(Object error, StackTrace stackTrace);
+typedef VariantHostInvalidEntryCallback =
+    void Function(VariantParseIssue issue);
 
 class VariantHost extends StatefulWidget {
   final Uri url;
@@ -18,6 +21,7 @@ class VariantHost extends StatefulWidget {
   final Duration? timeout;
   final VariantHostLoadedCallback? onLoaded;
   final VariantHostLoadErrorCallback? onLoadError;
+  final VariantHostInvalidEntryCallback? onInvalidEntry;
 
   const VariantHost({
     super.key,
@@ -29,6 +33,7 @@ class VariantHost extends StatefulWidget {
     this.timeout,
     this.onLoaded,
     this.onLoadError,
+    this.onInvalidEntry,
   });
 
   @override
@@ -88,6 +93,10 @@ class _VariantHostState extends State<VariantHost> {
 
     if (!mounted || version != _loadVersion) {
       return;
+    }
+
+    for (final issue in result.issues) {
+      widget.onInvalidEntry?.call(issue);
     }
 
     if (widget.cache) {

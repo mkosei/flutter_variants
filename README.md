@@ -248,6 +248,7 @@ VariantHost(
   onLoadError: (error, stackTrace) {
     // Keep local fallbacks and report the error if needed.
   },
+  onInvalidEntry: (issue) {}, // Optional: observe invalid entries.
   child: const App(),
 )
 ```
