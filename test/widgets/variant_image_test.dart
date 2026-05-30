@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_variants/flutter_variants.dart';
 
-import 'test_image.dart';
+import '../assets/test_image.dart';
 
 void main() {
   group('VariantImage', () {
