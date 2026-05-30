@@ -1,6 +1,9 @@
 library;
 
+export 'src/core/variant_host.dart';
 export 'src/core/variant_scope.dart';
+export 'src/loader/variant_values_loader.dart';
+export 'src/loader/variant_values_parser.dart';
 export 'src/values/variant_color.dart';
 export 'src/values/variant_spacing.dart';
 export 'src/widgets/variant_image.dart';
