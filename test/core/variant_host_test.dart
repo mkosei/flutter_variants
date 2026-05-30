@@ -52,6 +52,33 @@ void main() {
       expect(find.text('Fallback'), findsNothing);
     });
 
+    testWidgets('calls onLoaded after values are loaded', (tester) async {
+      final completer = Completer<VariantValues>();
+      VariantValues? loadedValues;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            loader: (_) => completer.future,
+            onLoaded: (values) {
+              loadedValues = values;
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      completer.complete({
+        'home.title': {'type': 'text', 'value': 'Loaded'},
+      });
+      await tester.pump();
+
+      expect(loadedValues, {
+        'home.title': {'type': 'text', 'value': 'Loaded'},
+      });
+    });
+
     testWidgets('keeps fallback values when loading fails', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -65,6 +92,55 @@ void main() {
 
       await tester.pump();
 
+      expect(find.text('Fallback'), findsOneWidget);
+    });
+
+    testWidgets('calls onLoadError when loading fails', (tester) async {
+      Object? loadError;
+      StackTrace? loadStackTrace;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            loader: (_) => Future<VariantValues>.error(Exception('Failed')),
+            onLoadError: (error, stackTrace) {
+              loadError = error;
+              loadStackTrace = stackTrace;
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(loadError, isA<Exception>());
+      expect(loadStackTrace, isNotNull);
+      expect(find.text('Fallback'), findsOneWidget);
+    });
+
+    testWidgets('keeps fallback values when loading times out', (tester) async {
+      Object? loadError;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            timeout: const Duration(milliseconds: 10),
+            loader: (_) => Completer<VariantValues>().future,
+            onLoadError: (error, _) {
+              loadError = error;
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump(const Duration(milliseconds: 11));
+      await tester.pump();
+
+      expect(loadError, isA<TimeoutException>());
       expect(find.text('Fallback'), findsOneWidget);
     });
 

@@ -4,12 +4,18 @@ import '../loader/variant_values_loader.dart';
 import 'variant_scope.dart';
 
 typedef VariantHostLoader = Future<VariantValues> Function(Uri url);
+typedef VariantHostLoadedCallback = void Function(VariantValues values);
+typedef VariantHostLoadErrorCallback =
+    void Function(Object error, StackTrace stackTrace);
 
 class VariantHost extends StatefulWidget {
   final Uri url;
   final Widget child;
   final VariantValues initialValues;
   final VariantHostLoader loader;
+  final Duration? timeout;
+  final VariantHostLoadedCallback? onLoaded;
+  final VariantHostLoadErrorCallback? onLoadError;
 
   const VariantHost({
     super.key,
@@ -17,6 +23,9 @@ class VariantHost extends StatefulWidget {
     required this.child,
     this.initialValues = const {},
     this.loader = loadVariantValuesFromUrl,
+    this.timeout,
+    this.onLoaded,
+    this.onLoadError,
   });
 
   @override
@@ -47,14 +56,27 @@ class _VariantHostState extends State<VariantHost> {
     final VariantValues values;
 
     try {
-      values = await widget.loader(widget.url);
-    } catch (_) {
+      var pending = widget.loader(widget.url);
+      final timeout = widget.timeout;
+
+      if (timeout != null) {
+        pending = pending.timeout(timeout);
+      }
+
+      values = await pending;
+    } catch (error, stackTrace) {
+      if (mounted && version == _loadVersion) {
+        widget.onLoadError?.call(error, stackTrace);
+      }
+
       return;
     }
 
     if (!mounted || version != _loadVersion) {
       return;
     }
+
+    widget.onLoaded?.call(values);
 
     setState(() {
       _values = values;

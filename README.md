@@ -239,6 +239,19 @@ void main() {
 
 Invalid entries are ignored. Missing or invalid slot values fall back locally.
 
+For production apps, you can also set a timeout and observe load failures.
+
+```dart
+VariantHost(
+  url: Uri.parse('https://your-domain.com/apps/my_app/production/variants.json'),
+  timeout: const Duration(seconds: 3),
+  onLoadError: (error, stackTrace) {
+    // Keep local fallbacks and report the error if needed.
+  },
+  child: const App(),
+)
+```
+
 The SDK only consumes variant values. It does not require server-side code,
 runtime logic execution, or a proprietary backend.
 

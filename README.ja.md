@@ -229,6 +229,19 @@ void main() {
 
 不正なentryは無視されます。slotの値がない場合や不正な場合は、各widgetのfallbackが使われます。
 
+本番アプリでは、timeoutやload失敗時のcallbackも指定できます。
+
+```dart
+VariantHost(
+  url: Uri.parse('https://your-domain.com/apps/my_app/production/variants.json'),
+  timeout: const Duration(seconds: 3),
+  onLoadError: (error, stackTrace) {
+    // 必要ならerrorを記録する。UIはlocal fallbackのまま動く。
+  },
+  child: const App(),
+)
+```
+
 このSDKはvariant valuesを読むだけです。サーバー側でビジネスロジックやボタン処理を差し替える仕組みは持ちません。
 
 ## exampleを実行する
