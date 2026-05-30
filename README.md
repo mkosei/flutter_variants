@@ -253,6 +253,23 @@ VariantHost(
 )
 ```
 
+To survive transient network failures and pick up server-side changes while the
+app is running, configure retries and a refresh interval.
+
+```dart
+VariantHost(
+  url: Uri.parse('https://your-domain.com/apps/my_app/production/variants.json'),
+  maxRetries: 2, // Optional: retry transient failures with exponential backoff.
+  retryBackoff: const Duration(milliseconds: 300), // Optional: initial backoff, doubles each retry.
+  refreshInterval: const Duration(minutes: 5), // Optional: re-fetch periodically.
+  child: const App(),
+)
+```
+
+`onLoadError` is only invoked after the final retry fails. The refresh timer
+keeps running even after a failed load, so the app can recover automatically
+once the server is reachable again.
+
 `VariantHost` uses in-memory caching by default. Cached values render
 immediately while fresh values are fetched in the background. Set
 `cache: false` if you need to always start from local fallbacks.

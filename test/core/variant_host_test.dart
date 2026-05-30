@@ -435,6 +435,197 @@ void main() {
       expect(find.text('Cached'), findsNothing);
     });
 
+    testWidgets('retries failed loads up to maxRetries', (tester) async {
+      var attempts = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            maxRetries: 2,
+            retryBackoff: const Duration(milliseconds: 50),
+            loader: (_) {
+              attempts++;
+
+              if (attempts < 3) {
+                return Future<VariantLoadResult>.error(Exception('Transient'));
+              }
+
+              return Future.value(
+                const VariantLoadResult(
+                  values: {
+                    'home.title': {'type': 'text', 'value': 'Loaded'},
+                  },
+                ),
+              );
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+
+      expect(attempts, 3);
+      expect(find.text('Loaded'), findsOneWidget);
+    });
+
+    testWidgets('calls onLoadError once after retries are exhausted', (
+      tester,
+    ) async {
+      var attempts = 0;
+      var errorCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            maxRetries: 2,
+            retryBackoff: const Duration(milliseconds: 10),
+            loader: (_) {
+              attempts++;
+              return Future<VariantLoadResult>.error(Exception('Failed'));
+            },
+            onLoadError: (_, __) {
+              errorCount++;
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 20));
+      await tester.pump();
+
+      expect(attempts, 3);
+      expect(errorCount, 1);
+      expect(find.text('Fallback'), findsOneWidget);
+    });
+
+    testWidgets('refreshes values on the refresh interval', (tester) async {
+      var attempts = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            cache: false,
+            refreshInterval: const Duration(milliseconds: 100),
+            loader: (_) {
+              attempts++;
+              return Future.value(
+                VariantLoadResult(
+                  values: {
+                    'home.title': {'type': 'text', 'value': 'Load $attempts'},
+                  },
+                ),
+              );
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(attempts, 1);
+      expect(find.text('Load 1'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+
+      expect(attempts, 2);
+      expect(find.text('Load 2'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+
+      expect(attempts, 3);
+      expect(find.text('Load 3'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('keeps refreshing after a failure', (tester) async {
+      var attempts = 0;
+      Object? loadError;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            refreshInterval: const Duration(milliseconds: 100),
+            loader: (_) {
+              attempts++;
+
+              if (attempts == 1) {
+                return Future<VariantLoadResult>.error(Exception('First'));
+              }
+
+              return Future.value(
+                const VariantLoadResult(
+                  values: {
+                    'home.title': {'type': 'text', 'value': 'Recovered'},
+                  },
+                ),
+              );
+            },
+            onLoadError: (error, _) {
+              loadError = error;
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(loadError, isA<Exception>());
+      expect(attempts, 1);
+      expect(find.text('Fallback'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+
+      expect(attempts, 2);
+      expect(find.text('Recovered'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('cancels refresh timer when disposed', (tester) async {
+      var attempts = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VariantHost(
+            url: Uri.parse('https://example.com/variants.json'),
+            refreshInterval: const Duration(milliseconds: 100),
+            loader: (_) {
+              attempts++;
+              return Future.value(const VariantLoadResult(values: {}));
+            },
+            child: const VariantText(id: 'home.title', fallback: 'Fallback'),
+          ),
+        ),
+      );
+
+      await tester.pump();
+      expect(attempts, 1);
+
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(attempts, 1);
+    });
+
     testWidgets('keeps cached values when loading fails', (tester) async {
       final url = Uri.parse('https://example.com/variants.json');
 

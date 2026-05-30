@@ -243,6 +243,20 @@ VariantHost(
 )
 ```
 
+一時的なネットワーク失敗に強くしたいときや、アプリ起動中にサーバー側の変更を取り込みたいときは、retryとrefresh intervalを指定します。
+
+```dart
+VariantHost(
+  url: Uri.parse('https://your-domain.com/apps/my_app/production/variants.json'),
+  maxRetries: 2, // 任意: 失敗時に指数backoffで再試行する。
+  retryBackoff: const Duration(milliseconds: 300), // 任意: 初回backoff。試行ごとに2倍になる。
+  refreshInterval: const Duration(minutes: 5), // 任意: 定期的に再取得する。
+  child: const App(),
+)
+```
+
+`onLoadError` は最後のretryも失敗したときだけ呼ばれます。refreshはloadに失敗しても止まらないので、サーバーが復旧すれば次回のintervalで自動的に値が取り込まれます。
+
 `VariantHost` はデフォルトでメモリキャッシュを使います。キャッシュ済みの値があれば即表示し、裏で最新の値を取得します。毎回local fallbackから始めたい場合は `cache: false` を指定します。
 
 このSDKはvariant valuesを読むだけです。サーバー側でビジネスロジックやボタン処理を差し替える仕組みは持ちません。
