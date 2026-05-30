@@ -209,14 +209,25 @@ URL例:
 https://your-domain.com/apps/my_app/production/variants.json
 ```
 
-Flutterアプリ側でこのJSONを取得し、`Map<String, Map<String, dynamic>>` に変換して `VariantScope` に渡します。
+Flutterアプリ側では、アプリ全体を `VariantHost` で包みます。
 
 ```dart
-VariantScope(
-  values: values,
-  child: const App(),
-)
+import 'package:flutter/widgets.dart';
+import 'package:flutter_variants/flutter_variants.dart';
+
+void main() {
+  runApp(
+    VariantHost(
+      url: Uri.parse(
+        'https://your-domain.com/apps/my_app/production/variants.json',
+      ),
+      child: const App(),
+    ),
+  );
+}
 ```
+
+不正なentryは無視されます。slotの値がない場合や不正な場合は、各widgetのfallbackが使われます。
 
 このSDKはvariant valuesを読むだけです。サーバー側でビジネスロジックやボタン処理を差し替える仕組みは持ちません。
 

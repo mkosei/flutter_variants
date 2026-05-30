@@ -219,18 +219,28 @@ Example URL:
 https://your-domain.com/apps/my_app/production/variants.json
 ```
 
-Your Flutter app can fetch this JSON, decode it into
-`Map<String, Map<String, dynamic>>`, and pass it to `VariantScope`.
+In your Flutter app, wrap your app with `VariantHost`.
 
 ```dart
-VariantScope(
-  values: values,
-  child: const App(),
-)
+import 'package:flutter/widgets.dart';
+import 'package:flutter_variants/flutter_variants.dart';
+
+void main() {
+  runApp(
+    VariantHost(
+      url: Uri.parse(
+        'https://your-domain.com/apps/my_app/production/variants.json',
+      ),
+      child: const App(),
+    ),
+  );
+}
 ```
 
+Invalid entries are ignored. Missing or invalid slot values fall back locally.
+
 The SDK only consumes variant values. It does not require server-side code,
-remote logic execution, or a proprietary backend.
+runtime logic execution, or a proprietary backend.
 
 ## Running The Example
 
