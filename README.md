@@ -252,6 +252,10 @@ VariantHost(
 )
 ```
 
+`VariantHost` uses in-memory caching by default. Cached values render
+immediately while fresh values are fetched in the background. Set
+`cache: false` if you need to always start from local fallbacks.
+
 The SDK only consumes variant values. It does not require server-side code,
 runtime logic execution, or a proprietary backend.
 

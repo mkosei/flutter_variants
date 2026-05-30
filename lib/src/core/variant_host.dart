@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../loader/variant_values_loader.dart';
+import '../loader/variant_values_memory_cache.dart';
 import 'variant_scope.dart';
 
 typedef VariantHostLoader = Future<VariantValues> Function(Uri url);
@@ -13,6 +14,7 @@ class VariantHost extends StatefulWidget {
   final Widget child;
   final VariantValues initialValues;
   final VariantHostLoader loader;
+  final bool cache;
   final Duration? timeout;
   final VariantHostLoadedCallback? onLoaded;
   final VariantHostLoadErrorCallback? onLoadError;
@@ -23,6 +25,7 @@ class VariantHost extends StatefulWidget {
     required this.child,
     this.initialValues = const {},
     this.loader = loadVariantValuesFromUrl,
+    this.cache = true,
     this.timeout,
     this.onLoaded,
     this.onLoadError,
@@ -53,6 +56,17 @@ class _VariantHostState extends State<VariantHost> {
 
   Future<void> _load() async {
     final version = ++_loadVersion;
+
+    if (widget.cache) {
+      final cachedValues = VariantValuesMemoryCache.get(widget.url);
+
+      if (cachedValues != null) {
+        setState(() {
+          _values = cachedValues;
+        });
+      }
+    }
+
     final VariantValues values;
 
     try {
@@ -74,6 +88,10 @@ class _VariantHostState extends State<VariantHost> {
 
     if (!mounted || version != _loadVersion) {
       return;
+    }
+
+    if (widget.cache) {
+      VariantValuesMemoryCache.set(widget.url, values);
     }
 
     widget.onLoaded?.call(values);

@@ -242,6 +242,8 @@ VariantHost(
 )
 ```
 
+`VariantHost` はデフォルトでメモリキャッシュを使います。キャッシュ済みの値があれば即表示し、裏で最新の値を取得します。毎回local fallbackから始めたい場合は `cache: false` を指定します。
+
 このSDKはvariant valuesを読むだけです。サーバー側でビジネスロジックやボタン処理を差し替える仕組みは持ちません。
 
 ## exampleを実行する
