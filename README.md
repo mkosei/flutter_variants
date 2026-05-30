@@ -141,6 +141,40 @@ VariantSpacing.of(
 )
 ```
 
+### `VariantEdgeInsets`
+
+Reads an `EdgeInsets` value by `id`.
+
+```dart
+VariantEdgeInsets.of(
+  context,
+  id: 'home.section.padding',
+  fallback: const EdgeInsets.all(16),
+)
+```
+
+Supported formats:
+
+- `value: 12` → `EdgeInsets.all(12)`
+- `value: { "left": 8, "top": 4, "right": 8, "bottom": 12 }` → per-side. Missing or invalid sides default to `0`.
+
+### `VariantBorderRadius`
+
+Reads a `BorderRadius` value by `id`.
+
+```dart
+VariantBorderRadius.of(
+  context,
+  id: 'home.card.radius',
+  fallback: BorderRadius.circular(8),
+)
+```
+
+Supported formats:
+
+- `value: 16` → `BorderRadius.circular(16)`
+- `value: { "topLeft": 12, "topRight": 12, "bottomLeft": 0, "bottomRight": 4 }` → per-corner. Missing or invalid corners default to `0`.
+
 ### `VariantVisibility`
 
 Reads a boolean value by `id` and switches between `child` and `replacement`.

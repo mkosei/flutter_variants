@@ -134,6 +134,40 @@ VariantSpacing.of(
 )
 ```
 
+### `VariantEdgeInsets`
+
+`id` に対応する `EdgeInsets` 値を読みます。
+
+```dart
+VariantEdgeInsets.of(
+  context,
+  id: 'home.section.padding',
+  fallback: const EdgeInsets.all(16),
+)
+```
+
+サポートする形式:
+
+- `value: 12` → `EdgeInsets.all(12)`
+- `value: { "left": 8, "top": 4, "right": 8, "bottom": 12 }` → 個別指定。欠けたフィールドや不正な値は `0` になります。
+
+### `VariantBorderRadius`
+
+`id` に対応する `BorderRadius` 値を読みます。
+
+```dart
+VariantBorderRadius.of(
+  context,
+  id: 'home.card.radius',
+  fallback: BorderRadius.circular(8),
+)
+```
+
+サポートする形式:
+
+- `value: 16` → `BorderRadius.circular(16)`
+- `value: { "topLeft": 12, "topRight": 12, "bottomLeft": 0, "bottomRight": 4 }` → 個別指定。欠けたフィールドや不正な値は `0` になります。
+
 ### `VariantVisibility`
 
 `id` に対応するboolean値を読み、`child` と `replacement` を切り替えます。
