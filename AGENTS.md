@@ -66,6 +66,7 @@ slots.
 - Icon identifiers from an approved set
 - Colors from an approved schema
 - Spacing values within approved constraints
+- Layout helpers within approved constraints (`EdgeInsets`, `BorderRadius`)
 - Visibility for approved slots
 - CTA labels
 - Design variants for predefined slots
@@ -99,18 +100,21 @@ Example:
 
 This can change a button label. It cannot change `onPressed`.
 
-## Phase 1 Scope
+## Current Status
 
-Phase 1 focuses on small variant components and variant value delivery.
+Phase 1 (variant slots + value delivery) is implemented:
 
-Build:
+- Core: `VariantScope`, `VariantHost` (timeout, retry with exponential
+  backoff, refresh interval, in-memory cache, load callbacks).
+- Widgets: `VariantText`, `VariantImage`, `VariantVisibility`.
+- Value readers: `VariantColor`, `VariantSpacing`, `VariantEdgeInsets`,
+  `VariantBorderRadius`.
 
-- Variant slot identifiers
-- Variant value lookup
-- Safe fallback values
-- Small variant widgets such as `VariantText`
-- Tests for missing, invalid, and valid variant values
-- Example usage inside a normal native Flutter layout
+The next milestone is `v1.0.0` = pub.dev publishable. Remaining API work and
+polish items are tracked in `TODO.md` (local, gitignored).
+
+The developer-facing API reference lives in `DOCUMENT.md`. `README.md` is the
+minimal entry point.
 
 Do not build yet:
 
@@ -128,37 +132,9 @@ Do not build yet:
 - Permissions
 - Variant business rules
 
-## MVP Target
-
-The first stable API should look like this:
-
-```dart
-VariantScope(
-  values: {
-    'home.hero.title': {
-      'type': 'text',
-      'value': 'Try the new onboarding',
-    },
-  },
-  child: VariantText(
-    id: 'home.hero.title',
-    fallback: 'Welcome',
-  ),
-)
-```
-
-The minimum product outcome is:
-
-```txt
-Server variant values change
--> Approved Flutter slots update
--> App behavior remains native
--> No app release required
-```
-
 ## Architecture
 
-Recommended package structure:
+Current package structure:
 
 ```txt
 lib/
@@ -166,22 +142,32 @@ lib/
   src/
     core/
       variant_scope.dart
+      variant_host.dart
+    loader/
+      variant_values_loader.dart
+      variant_values_memory_cache.dart
+      variant_values_parser.dart
+    values/
+      variant_color.dart
+      variant_spacing.dart
+      variant_edge_insets.dart
+      variant_border_radius.dart
     widgets/
       variant_text.dart
+      variant_image.dart
+      variant_visibility.dart
 ```
+
+Keep the runtime narrow. Prefer explicit slot widgets and typed value readers
+over generic variant rendering.
 
 Future areas may be added when needed:
 
 ```txt
 src/
-  loader/
-  cache/
   devtools/
   analytics/
 ```
-
-Keep the runtime narrow. Prefer explicit slot widgets over generic variant
-rendering.
 
 ## Error Handling
 
@@ -200,6 +186,10 @@ VariantText(
 ```
 
 If `home.title` is missing or invalid, render `Welcome`.
+
+`VariantHost` adds the same guarantee on the network path: load failures, parse
+issues, and timeouts never replace the current values — local fallbacks (or the
+last cached values) keep rendering.
 
 ## Future Hosted Product
 
@@ -234,3 +224,5 @@ When working in this repository:
   slots, not as server-defined logic.
 - Add tests around fallback behavior, valid values, invalid values, and example
   usage.
+- For the user-facing API reference, read `DOCUMENT.md` rather than guessing.
+- For the next planned work and the `v1.0.0` API list, check `TODO.md` first.
