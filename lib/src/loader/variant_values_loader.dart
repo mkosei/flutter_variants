@@ -6,8 +6,17 @@ import 'variant_values_parser.dart';
 
 typedef VariantValues = Map<String, Map<String, dynamic>>;
 
-Future<VariantValues> loadVariantValuesFromUrl(Uri url) async {
+Future<VariantLoadResult> loadVariantValuesFromUrl(Uri url) async {
   final responseBody = await NetworkAssetBundle(url).loadString('');
   final decoded = jsonDecode(responseBody);
-  return parseVariantValues(decoded);
+  final result = parseVariantValuesWithIssues(decoded);
+
+  return VariantLoadResult(values: result.values, issues: result.issues);
+}
+
+class VariantLoadResult {
+  final VariantValues values;
+  final List<VariantParseIssue> issues;
+
+  const VariantLoadResult({required this.values, this.issues = const []});
 }

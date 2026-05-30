@@ -4,7 +4,7 @@ import '../loader/variant_values_loader.dart';
 import '../loader/variant_values_memory_cache.dart';
 import 'variant_scope.dart';
 
-typedef VariantHostLoader = Future<VariantValues> Function(Uri url);
+typedef VariantHostLoader = Future<VariantLoadResult> Function(Uri url);
 typedef VariantHostLoadedCallback = void Function(VariantValues values);
 typedef VariantHostLoadErrorCallback =
     void Function(Object error, StackTrace stackTrace);
@@ -67,7 +67,7 @@ class _VariantHostState extends State<VariantHost> {
       }
     }
 
-    final VariantValues values;
+    final VariantLoadResult result;
 
     try {
       var pending = widget.loader(widget.url);
@@ -77,7 +77,7 @@ class _VariantHostState extends State<VariantHost> {
         pending = pending.timeout(timeout);
       }
 
-      values = await pending;
+      result = await pending;
     } catch (error, stackTrace) {
       if (mounted && version == _loadVersion) {
         widget.onLoadError?.call(error, stackTrace);
@@ -91,13 +91,13 @@ class _VariantHostState extends State<VariantHost> {
     }
 
     if (widget.cache) {
-      VariantValuesMemoryCache.set(widget.url, values);
+      VariantValuesMemoryCache.set(widget.url, result.values);
     }
 
-    widget.onLoaded?.call(values);
+    widget.onLoaded?.call(result.values);
 
     setState(() {
-      _values = values;
+      _values = result.values;
     });
   }
 

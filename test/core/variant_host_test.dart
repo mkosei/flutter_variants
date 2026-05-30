@@ -12,7 +12,7 @@ void main() {
     testWidgets('renders initial values before loaded values arrive', (
       tester,
     ) async {
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -32,7 +32,7 @@ void main() {
     });
 
     testWidgets('renders loaded variant values', (tester) async {
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -46,9 +46,13 @@ void main() {
 
       expect(find.text('Fallback'), findsOneWidget);
 
-      completer.complete({
-        'home.title': {'type': 'text', 'value': 'Loaded'},
-      });
+      completer.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Loaded'},
+          },
+        ),
+      );
       await tester.pump();
 
       expect(find.text('Loaded'), findsOneWidget);
@@ -56,7 +60,7 @@ void main() {
     });
 
     testWidgets('calls onLoaded after values are loaded', (tester) async {
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
       VariantValues? loadedValues;
 
       await tester.pumpWidget(
@@ -72,9 +76,13 @@ void main() {
         ),
       );
 
-      completer.complete({
-        'home.title': {'type': 'text', 'value': 'Loaded'},
-      });
+      completer.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Loaded'},
+          },
+        ),
+      );
       await tester.pump();
 
       expect(loadedValues, {
@@ -87,7 +95,7 @@ void main() {
         MaterialApp(
           home: VariantHost(
             url: Uri.parse('https://example.com/variants.json'),
-            loader: (_) => Future<VariantValues>.error(Exception('Failed')),
+            loader: (_) => Future<VariantLoadResult>.error(Exception('Failed')),
             child: const VariantText(id: 'home.title', fallback: 'Fallback'),
           ),
         ),
@@ -106,7 +114,7 @@ void main() {
         MaterialApp(
           home: VariantHost(
             url: Uri.parse('https://example.com/variants.json'),
-            loader: (_) => Future<VariantValues>.error(Exception('Failed')),
+            loader: (_) => Future<VariantLoadResult>.error(Exception('Failed')),
             onLoadError: (error, stackTrace) {
               loadError = error;
               loadStackTrace = stackTrace;
@@ -131,7 +139,7 @@ void main() {
           home: VariantHost(
             url: Uri.parse('https://example.com/variants.json'),
             timeout: const Duration(milliseconds: 10),
-            loader: (_) => Completer<VariantValues>().future,
+            loader: (_) => Completer<VariantLoadResult>().future,
             onLoadError: (error, _) {
               loadError = error;
             },
@@ -148,11 +156,11 @@ void main() {
     });
 
     testWidgets('reloads values when the URL changes', (tester) async {
-      final first = Completer<VariantValues>();
-      final second = Completer<VariantValues>();
+      final first = Completer<VariantLoadResult>();
+      final second = Completer<VariantLoadResult>();
       var url = Uri.parse('https://example.com/first.json');
 
-      Future<VariantValues> loader(Uri requestedUrl) {
+      Future<VariantLoadResult> loader(Uri requestedUrl) {
         if (requestedUrl.path.endsWith('first.json')) {
           return first.future;
         }
@@ -172,9 +180,13 @@ void main() {
 
       await tester.pumpWidget(build());
 
-      first.complete({
-        'home.title': {'type': 'text', 'value': 'First'},
-      });
+      first.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'First'},
+          },
+        ),
+      );
       await tester.pump();
 
       expect(find.text('First'), findsOneWidget);
@@ -182,9 +194,13 @@ void main() {
       url = Uri.parse('https://example.com/second.json');
       await tester.pumpWidget(build());
 
-      second.complete({
-        'home.title': {'type': 'text', 'value': 'Second'},
-      });
+      second.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Second'},
+          },
+        ),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('Second'), findsOneWidget);
@@ -195,7 +211,7 @@ void main() {
       tester,
     ) async {
       final url = Uri.parse('https://example.com/variants.json');
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
 
       VariantValuesMemoryCache.set(url, {
         'home.title': {'type': 'text', 'value': 'Cached'},
@@ -217,7 +233,7 @@ void main() {
 
     testWidgets('updates cached values after loading succeeds', (tester) async {
       final url = Uri.parse('https://example.com/variants.json');
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
 
       VariantValuesMemoryCache.set(url, {
         'home.title': {'type': 'text', 'value': 'Cached'},
@@ -233,9 +249,13 @@ void main() {
         ),
       );
 
-      completer.complete({
-        'home.title': {'type': 'text', 'value': 'Loaded'},
-      });
+      completer.complete(
+        const VariantLoadResult(
+          values: {
+            'home.title': {'type': 'text', 'value': 'Loaded'},
+          },
+        ),
+      );
       await tester.pump();
 
       expect(find.text('Loaded'), findsOneWidget);
@@ -246,7 +266,7 @@ void main() {
 
     testWidgets('ignores cached values when cache is disabled', (tester) async {
       final url = Uri.parse('https://example.com/variants.json');
-      final completer = Completer<VariantValues>();
+      final completer = Completer<VariantLoadResult>();
 
       VariantValuesMemoryCache.set(url, {
         'home.title': {'type': 'text', 'value': 'Cached'},
@@ -278,7 +298,7 @@ void main() {
         MaterialApp(
           home: VariantHost(
             url: url,
-            loader: (_) => Future<VariantValues>.error(Exception('Failed')),
+            loader: (_) => Future<VariantLoadResult>.error(Exception('Failed')),
             child: const VariantText(id: 'home.title', fallback: 'Fallback'),
           ),
         ),
