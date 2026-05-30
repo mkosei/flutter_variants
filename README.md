@@ -1,5 +1,7 @@
 # flutter_variants
 
+[日本語](README.ja.md) | English
+
 A Flutter SDK for safe UI variants.
 
 `flutter_variants` lets you change approved UI values such as text, labels, and
@@ -229,79 +231,6 @@ VariantScope(
 
 The SDK only consumes variant values. It does not require server-side code,
 remote logic execution, or a proprietary backend.
-
-## 日本語
-
-`flutter_variants` は、FlutterアプリのUIバリアントを安全に差し替えるためのSDKです。
-
-テキスト、画像、色、余白、表示/非表示などの「見た目の値」だけを差し替えます。画面構造、ナビゲーション、ボタンの処理、API呼び出し、認証、決済、ビジネスロジックはFlutterアプリ側に残します。
-
-### 基本方針
-
-サーバー側から変更できるもの:
-
-- 文言
-- CTAラベル
-- 画像参照
-- 色
-- 余白
-- 表示/非表示
-
-サーバー側から変更できないもの:
-
-- 任意コードの実行
-- ボタンの処理
-- ナビゲーション
-- API呼び出し
-- 認証/決済/ビジネスロジック
-
-### セルフホスト
-
-`flutter_variants` は専用のホスティングサービスを必要としません。
-
-variant values はただのJSONなので、Cloudflare Pages、Netlify、Vercel、S3、自前バックエンド、任意の静的ホスティングに置けます。
-
-例:
-
-```json
-{
-  "home.title": {
-    "type": "text",
-    "value": "新しいオンボーディングを試す"
-  },
-  "home.cta.label": {
-    "type": "text",
-    "value": "今すぐ始める"
-  },
-  "home.cta.background": {
-    "type": "color",
-    "value": "#FF3366"
-  }
-}
-```
-
-配置例:
-
-```txt
-public/
-  apps/
-    my_app/
-      production/
-        variants.json
-      staging/
-        variants.json
-```
-
-Flutterアプリ側でこのJSONを取得し、`Map<String, Map<String, dynamic>>` に変換して `VariantScope` に渡します。
-
-```dart
-VariantScope(
-  values: values,
-  child: const App(),
-)
-```
-
-このSDKはvariant valuesを読むだけです。サーバー側でビジネスロジックやボタン処理を差し替える仕組みは持ちません。
 
 ## Running The Example
 
