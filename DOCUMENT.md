@@ -17,6 +17,9 @@ This guide covers the full developer-facing surface of `flutter_variants`.
   - [`VariantSpacing`](#variantspacing)
   - [`VariantEdgeInsets`](#variantedgeinsets)
   - [`VariantBorderRadius`](#variantborderradius)
+  - [`VariantString`](#variantstring)
+  - [`VariantBool`](#variantbool)
+  - [`VariantNumber`](#variantnumber)
   - [`VariantVisibility`](#variantvisibility)
 - [`VariantHost`](#varianthost)
 - [Self-hosting](#self-hosting)
@@ -196,6 +199,56 @@ Supported formats:
 
 - `value: 16` → `BorderRadius.circular(16)`
 - `value: { "topLeft": 12, "topRight": 12, "bottomLeft": 0, "bottomRight": 4 }` → per-corner. Missing or invalid corners default to `0`.
+
+### `VariantString`
+
+Reads a raw string value by `id`. Use this when you need the string itself
+rather than a `Text` widget — `AppBar` titles, `SnackBar` messages, dialog
+copy, etc.
+
+```dart
+final title = VariantString.of(
+  context,
+  id: 'home.title',
+  fallback: 'Welcome',
+);
+```
+
+JSON shape: `{ "type": "string", "value": "..." }`.
+
+### `VariantBool`
+
+Reads a raw boolean value by `id`. Complements `VariantVisibility` for cases
+that branch on a flag without swapping widgets (feature gates, conditional
+behavior, etc.).
+
+```dart
+final isEnabled = VariantBool.of(
+  context,
+  id: 'home.experiment.enabled',
+  fallback: false,
+);
+```
+
+JSON shape: `{ "type": "bool", "value": true }`. Shares the same type as
+`VariantVisibility`, so the same entry can be read either way.
+
+### `VariantNumber`
+
+Reads a generic numeric value by `id` (returns `num`). Use this for counts,
+opacities, durations in milliseconds, and any non-spacing number.
+
+```dart
+final maxItems = VariantNumber.of(
+  context,
+  id: 'home.list.max_items',
+  fallback: 10,
+  min: 1,
+  max: 100,
+);
+```
+
+JSON shape: `{ "type": "number", "value": 25 }` or `{ "type": "number", "value": 0.75 }`.
 
 ### `VariantVisibility`
 

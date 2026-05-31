@@ -17,6 +17,9 @@
   - [`VariantSpacing`](#variantspacing)
   - [`VariantEdgeInsets`](#variantedgeinsets)
   - [`VariantBorderRadius`](#variantborderradius)
+  - [`VariantString`](#variantstring)
+  - [`VariantBool`](#variantbool)
+  - [`VariantNumber`](#variantnumber)
   - [`VariantVisibility`](#variantvisibility)
 - [`VariantHost`](#varianthost)
 - [セルフホスト](#セルフホスト)
@@ -192,6 +195,50 @@ VariantBorderRadius.of(
 
 - `value: 16` → `BorderRadius.circular(16)`
 - `value: { "topLeft": 12, "topRight": 12, "bottomLeft": 0, "bottomRight": 4 }` → 個別指定。欠けたフィールドや不正な値は `0` になります。
+
+### `VariantString`
+
+`id` に対応する生の文字列値を読みます。`Text` widgetではなく文字列そのものが欲しいケース（`AppBar` title、`SnackBar` メッセージ、dialog文言など）向け。
+
+```dart
+final title = VariantString.of(
+  context,
+  id: 'home.title',
+  fallback: 'Welcome',
+);
+```
+
+JSON形式: `{ "type": "string", "value": "..." }`
+
+### `VariantBool`
+
+`id` に対応する生のboolean値を読みます。widgetを切り替えない条件分岐（feature flag、機能の有効/無効など）に使います。`VariantVisibility` を補完するrawバージョン。
+
+```dart
+final isEnabled = VariantBool.of(
+  context,
+  id: 'home.experiment.enabled',
+  fallback: false,
+);
+```
+
+JSON形式: `{ "type": "bool", "value": true }`。`VariantVisibility` と同じtypeを共有するので、同じエントリを両方から読めます。
+
+### `VariantNumber`
+
+`id` に対応する汎用数値（`num`）を読みます。件数、opacity、ミリ秒単位のduration、spacing以外の数値全般に使います。
+
+```dart
+final maxItems = VariantNumber.of(
+  context,
+  id: 'home.list.max_items',
+  fallback: 10,
+  min: 1,
+  max: 100,
+);
+```
+
+JSON形式: `{ "type": "number", "value": 25 }` または `{ "type": "number", "value": 0.75 }`。
 
 ### `VariantVisibility`
 
