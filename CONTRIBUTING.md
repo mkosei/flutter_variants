@@ -127,3 +127,9 @@ Open an issue with:
 
 Open a GitHub Discussion or issue with the `question` label. Even half-formed
 ideas about API or design are welcome.
+
+## License
+
+`flutter_variants` is released under the [MIT License](LICENSE). By submitting
+a pull request, you agree that your contributions are licensed under the same
+MIT License.
