@@ -20,6 +20,7 @@
   - [`VariantString`](#variantstring)
   - [`VariantBool`](#variantbool)
   - [`VariantNumber`](#variantnumber)
+  - [`VariantTextStyle`](#varianttextstyle)
   - [`VariantVisibility`](#variantvisibility)
 - [`VariantHost`](#varianthost)
 - [セルフホスト](#セルフホスト)
@@ -239,6 +240,52 @@ final maxItems = VariantNumber.of(
 ```
 
 JSON形式: `{ "type": "number", "value": 25 }` または `{ "type": "number", "value": 0.75 }`。
+
+### `VariantTextStyle`
+
+`id` に対応する `TextStyle` のサブセットを読み、`fallback` に `copyWith` でマージします。欠けたフィールドや不正な値はfallback値のまま残ります。
+
+```dart
+Text(
+  'Welcome',
+  style: VariantTextStyle.of(
+    context,
+    id: 'home.title.style',
+    fallback: Theme.of(context).textTheme.titleLarge!,
+  ),
+)
+```
+
+JSON形式:
+
+```json
+{
+  "type": "textStyle",
+  "value": {
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "color": "#FF3366",
+    "fontFamily": "Inter",
+    "letterSpacing": 0.5,
+    "height": 1.4,
+    "fontStyle": "italic"
+  }
+}
+```
+
+サポートフィールド:
+
+| フィールド      | 受け付ける形式                                                                                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fontSize`      | 数値                                                                                                                                                        |
+| `fontWeight`    | 数値 `100`〜`900`、または文字列 `thin` / `extraLight` / `light` / `normal` (or `regular`) / `medium` / `semiBold` / `bold` / `extraBold` / `black`           |
+| `color`         | `#RRGGBB` または `#AARRGGBB`                                                                                                                                |
+| `fontFamily`    | 文字列                                                                                                                                                      |
+| `letterSpacing` | 数値                                                                                                                                                        |
+| `height`        | 数値（line-height multiplier）                                                                                                                              |
+| `fontStyle`     | `normal` または `italic`                                                                                                                                    |
+
+全フィールドoptional。上書きしたいものだけ指定すればOK。
 
 ### `VariantVisibility`
 

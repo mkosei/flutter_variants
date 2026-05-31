@@ -47,7 +47,7 @@ See [DOCUMENT.md](DOCUMENT.md) for the full developer guide:
 - API reference (`VariantScope`, `VariantText`, `VariantImage`,
   `VariantColor`, `VariantSpacing`, `VariantEdgeInsets`,
   `VariantBorderRadius`, `VariantString`, `VariantBool`, `VariantNumber`,
-  `VariantVisibility`)
+  `VariantTextStyle`, `VariantVisibility`)
 - `VariantHost` configuration (timeout, retry, refresh, cache, callbacks)
 - Self-hosting and the `variants.json` format
 

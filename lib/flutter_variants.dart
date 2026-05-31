@@ -11,6 +11,7 @@ export 'src/values/variant_edge_insets.dart';
 export 'src/values/variant_number.dart';
 export 'src/values/variant_spacing.dart';
 export 'src/values/variant_string.dart';
+export 'src/values/variant_text_style.dart';
 export 'src/widgets/variant_image.dart';
 export 'src/widgets/variant_text.dart';
 export 'src/widgets/variant_visibility.dart';

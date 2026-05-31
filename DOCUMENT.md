@@ -20,6 +20,7 @@ This guide covers the full developer-facing surface of `flutter_variants`.
   - [`VariantString`](#variantstring)
   - [`VariantBool`](#variantbool)
   - [`VariantNumber`](#variantnumber)
+  - [`VariantTextStyle`](#varianttextstyle)
   - [`VariantVisibility`](#variantvisibility)
 - [`VariantHost`](#varianthost)
 - [Self-hosting](#self-hosting)
@@ -249,6 +250,54 @@ final maxItems = VariantNumber.of(
 ```
 
 JSON shape: `{ "type": "number", "value": 25 }` or `{ "type": "number", "value": 0.75 }`.
+
+### `VariantTextStyle`
+
+Reads a subset of `TextStyle` by `id` and merges it onto the provided
+fallback (via `copyWith`). Fields that are missing or invalid keep the
+fallback's value.
+
+```dart
+Text(
+  'Welcome',
+  style: VariantTextStyle.of(
+    context,
+    id: 'home.title.style',
+    fallback: Theme.of(context).textTheme.titleLarge!,
+  ),
+)
+```
+
+JSON shape:
+
+```json
+{
+  "type": "textStyle",
+  "value": {
+    "fontSize": 22,
+    "fontWeight": "bold",
+    "color": "#FF3366",
+    "fontFamily": "Inter",
+    "letterSpacing": 0.5,
+    "height": 1.4,
+    "fontStyle": "italic"
+  }
+}
+```
+
+Supported fields:
+
+| Field           | Accepts                                                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fontSize`      | number                                                                                                                                                   |
+| `fontWeight`    | number `100`–`900`, or string `thin` / `extraLight` / `light` / `normal` (or `regular`) / `medium` / `semiBold` / `bold` / `extraBold` / `black`         |
+| `color`         | `#RRGGBB` or `#AARRGGBB`                                                                                                                                 |
+| `fontFamily`    | string                                                                                                                                                   |
+| `letterSpacing` | number                                                                                                                                                   |
+| `height`        | number (line-height multiplier)                                                                                                                          |
+| `fontStyle`     | `normal` or `italic`                                                                                                                                     |
+
+Every field is optional. Specify only what you want to override.
 
 ### `VariantVisibility`
 

@@ -44,7 +44,7 @@ VariantHost(
 - APIリファレンス（`VariantScope` / `VariantText` / `VariantImage` /
   `VariantColor` / `VariantSpacing` / `VariantEdgeInsets` /
   `VariantBorderRadius` / `VariantString` / `VariantBool` / `VariantNumber` /
-  `VariantVisibility`）
+  `VariantTextStyle` / `VariantVisibility`）
 - `VariantHost` の設定（timeout、retry、refresh、cache、callback）
 - セルフホストと `variants.json` のフォーマット
 
