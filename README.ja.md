@@ -43,9 +43,14 @@ VariantHost(
 - 基本方針とslot設計
 - APIリファレンス（`VariantScope` / `VariantText` / `VariantImage` /
   `VariantColor` / `VariantSpacing` / `VariantEdgeInsets` /
-  `VariantBorderRadius` / `VariantVisibility`）
+  `VariantBorderRadius` / `VariantString` / `VariantBool` / `VariantNumber` /
+  `VariantVisibility`）
 - `VariantHost` の設定（timeout、retry、refresh、cache、callback）
 - セルフホストと `variants.json` のフォーマット
+
+## コントリビュート
+
+PR・issueは歓迎です。開発セットアップ、コード規約、守るべきルールは [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md) を参照してください。
 
 ## exampleを実行する
 

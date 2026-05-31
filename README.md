@@ -46,9 +46,15 @@ See [DOCUMENT.md](DOCUMENT.md) for the full developer guide:
 - Philosophy and the slot-based approach
 - API reference (`VariantScope`, `VariantText`, `VariantImage`,
   `VariantColor`, `VariantSpacing`, `VariantEdgeInsets`,
-  `VariantBorderRadius`, `VariantVisibility`)
+  `VariantBorderRadius`, `VariantString`, `VariantBool`, `VariantNumber`,
+  `VariantVisibility`)
 - `VariantHost` configuration (timeout, retry, refresh, cache, callbacks)
 - Self-hosting and the `variants.json` format
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for the
+dev setup, code conventions, and hard rules to respect.
 
 ## Running the example
 
