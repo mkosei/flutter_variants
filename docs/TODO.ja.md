@@ -23,7 +23,7 @@ Flutter標準クラスのhelper:
 
 ## 次に追加したいAPI（v1.0.0以降検討）
 
-- なし（候補が出たらここに追記）
+- `VariantTextStyle` に `decoration` / `decorationColor` / `decorationStyle` / `decorationThickness` を追加する。v1.0.0では除外。理由はユースケースが狭い（取り消し線でセール価格、リンクの下線など）かつ4 sub-fieldでschema複雑度が上がるため。後から非破壊で追加可能。
 
 ## loaderの改善
 

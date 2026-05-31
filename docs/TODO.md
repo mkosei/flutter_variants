@@ -29,7 +29,10 @@ Other candidates to consider:
 
 ## APIs to consider after v1.0.0
 
-- None yet (add candidates here when they come up).
+- Extend `VariantTextStyle` with `decoration` / `decorationColor` /
+  `decorationStyle` / `decorationThickness`. Deferred from v1.0 because the
+  use cases are narrow (sale prices, link underlines) and the four sub-fields
+  add notable schema complexity. Adding them later is non-breaking.
 
 ## Loader improvements
 
