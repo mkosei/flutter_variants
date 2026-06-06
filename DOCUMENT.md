@@ -14,6 +14,7 @@ This guide covers the full developer-facing surface of `flutter_variants`.
   - [`VariantText`](#varianttext)
   - [`VariantButtonLabel`](#variantbuttonlabel)
   - [`VariantImage`](#variantimage)
+  - [`VariantIcon`](#varianticon)
   - [`VariantColor`](#variantcolor)
   - [`VariantSpacing`](#variantspacing)
   - [`VariantEdgeInsets`](#variantedgeinsets)
@@ -157,6 +158,38 @@ VariantImage(
   fallback: const AssetImage('assets/default_hero.png'),
 )
 ```
+
+### `VariantIcon`
+
+Renders an icon from an **approved set** the app provides up-front. The
+server can only choose among identifiers the app has explicitly allowed —
+arbitrary `IconData` references cannot be smuggled in over the wire.
+
+```dart
+VariantIcon(
+  id: 'home.cta.icon',
+  fallback: Icons.shopping_cart,
+  approvedIcons: const {
+    'shopping_cart': Icons.shopping_cart,
+    'star': Icons.star,
+    'favorite': Icons.favorite,
+  },
+  size: 24,
+)
+```
+
+JSON shape:
+
+```json
+{
+  "type": "icon",
+  "value": "star"
+}
+```
+
+If `value` is missing, not a string, or not present in `approvedIcons`, the
+widget renders the local fallback. `color`, `size`, and `semanticLabel` are
+optional and behave like the standard `Icon` widget.
 
 ### `VariantColor`
 

@@ -42,9 +42,9 @@ VariantHost(
 
 - 基本方針とslot設計
 - APIリファレンス（`VariantScope` / `VariantText` / `VariantButtonLabel` /
-  `VariantImage` / `VariantColor` / `VariantSpacing` / `VariantEdgeInsets` /
-  `VariantBorderRadius` / `VariantString` / `VariantBool` / `VariantNumber` /
-  `VariantTextStyle` / `VariantVisibility`）
+  `VariantImage` / `VariantIcon` / `VariantColor` / `VariantSpacing` /
+  `VariantEdgeInsets` / `VariantBorderRadius` / `VariantString` /
+  `VariantBool` / `VariantNumber` / `VariantTextStyle` / `VariantVisibility`）
 - `VariantHost` の設定（timeout、retry、refresh、cache、callback）
 - セルフホストと `variants.json` のフォーマット
 

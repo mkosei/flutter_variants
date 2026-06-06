@@ -14,6 +14,7 @@
   - [`VariantText`](#varianttext)
   - [`VariantButtonLabel`](#variantbuttonlabel)
   - [`VariantImage`](#variantimage)
+  - [`VariantIcon`](#varianticon)
   - [`VariantColor`](#variantcolor)
   - [`VariantSpacing`](#variantspacing)
   - [`VariantEdgeInsets`](#variantedgeinsets)
@@ -148,6 +149,34 @@ VariantImage(
   fallback: const AssetImage('assets/default_hero.png'),
 )
 ```
+
+### `VariantIcon`
+
+アプリが事前に承認したicon setからiconを表示します。サーバーは**アプリが明示的に許可したidentifierの中からしか選べない**ので、任意の `IconData` を経路越しに渡されることはありません。
+
+```dart
+VariantIcon(
+  id: 'home.cta.icon',
+  fallback: Icons.shopping_cart,
+  approvedIcons: const {
+    'shopping_cart': Icons.shopping_cart,
+    'star': Icons.star,
+    'favorite': Icons.favorite,
+  },
+  size: 24,
+)
+```
+
+JSON形式:
+
+```json
+{
+  "type": "icon",
+  "value": "star"
+}
+```
+
+`value` が欠けている、文字列でない、`approvedIcons` に含まれないいずれの場合もローカルfallbackが表示されます。`color` / `size` / `semanticLabel` はoptionalで、標準 `Icon` widget と同じ挙動です。
 
 ### `VariantColor`
 
