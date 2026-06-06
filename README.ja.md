@@ -12,22 +12,7 @@
 
 ## 最小例
 
-```dart
-VariantScope(
-  values: {
-    'home.title': {
-      'type': 'text',
-      'value': '新しいオンボーディングを試す',
-    },
-  },
-  child: const VariantText(
-    id: 'home.title',
-    fallback: 'Welcome',
-  ),
-)
-```
-
-サーバーから値を配信する場合は、アプリ全体を `VariantHost` で包みます。
+アプリ全体を `VariantHost` で包み、JSON URLからvariant値を読み込みます。
 
 ```dart
 VariantHost(
@@ -37,6 +22,28 @@ VariantHost(
   child: const App(),
 )
 ```
+
+値を差し込みたい場所にslot widgetを置きます。各slotには必ずローカルfallbackを指定するので、値が無い・不正・サーバー到達不能のいずれでもUIは描画され続けます。
+
+```dart
+const VariantText(
+  id: 'home.title',
+  fallback: 'Welcome',
+)
+```
+
+`variants.json` の例：
+
+```json
+{
+  "home.title": {
+    "type": "text",
+    "value": "新しいオンボーディングを試す"
+  }
+}
+```
+
+テスト、preview、開発時のoverrideでは、slot widgetに直接値を流す `VariantScope` も使えます。詳細は [DOCUMENT.ja.md](DOCUMENT.ja.md) を参照してください。
 
 ## ドキュメント
 

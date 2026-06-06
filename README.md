@@ -15,22 +15,7 @@ This is not a server-driven UI renderer. It is a small variant slot system.
 
 ## Minimal example
 
-```dart
-VariantScope(
-  values: {
-    'home.title': {
-      'type': 'text',
-      'value': 'Try the new onboarding',
-    },
-  },
-  child: const VariantText(
-    id: 'home.title',
-    fallback: 'Welcome',
-  ),
-)
-```
-
-For server-delivered values, wrap the app with `VariantHost`:
+Wrap your app with `VariantHost` to load variant values from a JSON URL:
 
 ```dart
 VariantHost(
@@ -40,6 +25,31 @@ VariantHost(
   child: const App(),
 )
 ```
+
+Embed slot widgets where the values should flow in. Each slot always has a
+local fallback, so the UI keeps rendering when values are missing, invalid,
+or the server is unreachable:
+
+```dart
+const VariantText(
+  id: 'home.title',
+  fallback: 'Welcome',
+)
+```
+
+Example `variants.json`:
+
+```json
+{
+  "home.title": {
+    "type": "text",
+    "value": "Try the new onboarding"
+  }
+}
+```
+
+For tests, previews, and dev-time overrides, slot widgets can also be fed
+directly via `VariantScope` — see [DOCUMENT.md](DOCUMENT.md).
 
 ## Documentation
 

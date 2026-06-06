@@ -102,6 +102,13 @@ The server can change `home.title` and `home.cta.label`. It cannot change
 
 Provides variant values to the widgets below it.
 
+> In production you usually don't wire this directly. Wrap your app with
+> [`VariantHost`](#varianthost) instead — it fetches values from a JSON URL
+> and renders a `VariantScope` for you.
+>
+> `VariantScope` is exposed for tests, previews, and dev-time overrides
+> where you want to feed values inline without a network load.
+
 ```dart
 VariantScope(
   values: {

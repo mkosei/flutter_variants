@@ -100,6 +100,10 @@ VariantScope(
 
 配下のwidgetにvariant valuesを提供します。
 
+> production用途では、これを直接使うことは普通ありません。アプリ全体は [`VariantHost`](#varianthost) で包むのが基本です。`VariantHost` がJSON URLから値を取得し、内部で `VariantScope` を構築します。
+>
+> `VariantScope` は、テスト・preview・開発時のoverrideなど、ネットワークloadを介さずに値を直接渡したいケースのために公開されています。
+
 ```dart
 VariantScope(
   values: {
