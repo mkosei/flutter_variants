@@ -41,8 +41,8 @@ VariantHost(
 詳細は [DOCUMENT.ja.md](DOCUMENT.ja.md) を参照してください。
 
 - 基本方針とslot設計
-- APIリファレンス（`VariantScope` / `VariantText` / `VariantImage` /
-  `VariantColor` / `VariantSpacing` / `VariantEdgeInsets` /
+- APIリファレンス（`VariantScope` / `VariantText` / `VariantButtonLabel` /
+  `VariantImage` / `VariantColor` / `VariantSpacing` / `VariantEdgeInsets` /
   `VariantBorderRadius` / `VariantString` / `VariantBool` / `VariantNumber` /
   `VariantTextStyle` / `VariantVisibility`）
 - `VariantHost` の設定（timeout、retry、refresh、cache、callback）

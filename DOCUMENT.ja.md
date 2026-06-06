@@ -12,6 +12,7 @@
 - [APIリファレンス](#apiリファレンス)
   - [`VariantScope`](#variantscope)
   - [`VariantText`](#varianttext)
+  - [`VariantButtonLabel`](#variantbuttonlabel)
   - [`VariantImage`](#variantimage)
   - [`VariantColor`](#variantcolor)
   - [`VariantSpacing`](#variantspacing)
@@ -120,6 +121,22 @@ const VariantText(
   fallback: 'Welcome',
 )
 ```
+
+### `VariantButtonLabel`
+
+ラベルだけvariantで差し替えられる `ElevatedButton`。callbackはFlutterアプリ側に残ります。**サーバーはボタンが「何と言うか」を変えられる、ただし「何をするか」は変えられない**、というpackageの推奨パターンを体現したwidget。
+
+```dart
+VariantButtonLabel(
+  id: 'home.cta.label',
+  fallback: 'Continue',
+  onPressed: _onContinue,
+)
+```
+
+JSON形式は `VariantText` と同じ（`{ "type": "text", "value": "..." }`）。
+
+`onPressed: null` でdisabledなボタンになります。`style` と `textStyle` はoptionalで、ボタンのテーマはFlutter側に残しつつ文言だけJSONから取れます。
 
 ### `VariantImage`
 

@@ -44,8 +44,8 @@ VariantHost(
 See [DOCUMENT.md](DOCUMENT.md) for the full developer guide:
 
 - Philosophy and the slot-based approach
-- API reference (`VariantScope`, `VariantText`, `VariantImage`,
-  `VariantColor`, `VariantSpacing`, `VariantEdgeInsets`,
+- API reference (`VariantScope`, `VariantText`, `VariantButtonLabel`,
+  `VariantImage`, `VariantColor`, `VariantSpacing`, `VariantEdgeInsets`,
   `VariantBorderRadius`, `VariantString`, `VariantBool`, `VariantNumber`,
   `VariantTextStyle`, `VariantVisibility`)
 - `VariantHost` configuration (timeout, retry, refresh, cache, callbacks)

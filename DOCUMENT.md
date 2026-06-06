@@ -12,6 +12,7 @@ This guide covers the full developer-facing surface of `flutter_variants`.
 - [API reference](#api-reference)
   - [`VariantScope`](#variantscope)
   - [`VariantText`](#varianttext)
+  - [`VariantButtonLabel`](#variantbuttonlabel)
   - [`VariantImage`](#variantimage)
   - [`VariantColor`](#variantcolor)
   - [`VariantSpacing`](#variantspacing)
@@ -123,6 +124,27 @@ const VariantText(
   fallback: 'Welcome',
 )
 ```
+
+### `VariantButtonLabel`
+
+A small `ElevatedButton` whose label comes from a variant slot, while the
+callback stays in Flutter app code. This is the package's recommended
+pattern for buttons: the server can change what the button *says*, but it
+cannot change what the button *does*.
+
+```dart
+VariantButtonLabel(
+  id: 'home.cta.label',
+  fallback: 'Continue',
+  onPressed: _onContinue,
+)
+```
+
+Reuses the same JSON shape as `VariantText` (`{ "type": "text", "value": "..." }`).
+
+`onPressed` may be `null` to render a disabled button. `style` and
+`textStyle` are optional, so the button can be themed in Flutter while the
+copy stays in the JSON.
 
 ### `VariantImage`
 
