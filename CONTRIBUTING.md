@@ -19,14 +19,14 @@ from a JSON URL. The package intentionally stays narrow:
 If you are new, read [`AGENTS.md`](AGENTS.md) first — it explains the
 philosophy and the boundaries we hold to. The user-facing API reference lives
 in [`DOCUMENT.md`](DOCUMENT.md). The current roadmap lives in
-[`docs/TODO.md`](docs/TODO.md).
+[`doc/TODO.md`](doc/TODO.md).
 
 ## Ways to contribute
 
 - **Report issues** — bugs, confusing docs, missing examples.
 - **Improve docs** — README, DOCUMENT, code comments, examples.
 - **Add tests** — regression tests for invalid JSON, edge cases, missing slots.
-- **Implement APIs** — pick something from `docs/TODO.md`, especially items
+- **Implement APIs** — pick something from `doc/TODO.md`, especially items
   under "APIs to build before v1.0.0".
 - **Share use cases** — open a discussion about how you are using or want to
   use the SDK. Real use cases drive API decisions.
@@ -102,7 +102,7 @@ When in doubt, lean conservative. The point of the package is the constraint.
 
 ## Good places to start
 
-Pick from `docs/TODO.md`. Smaller starter tasks:
+Pick from `doc/TODO.md`. Smaller starter tasks:
 
 - Add more usage examples to `DOCUMENT.md` (button labels, banners, image
   swaps, color changes).

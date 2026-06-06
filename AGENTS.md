@@ -111,7 +111,7 @@ Phase 1 (variant slots + value delivery) is implemented:
   `VariantBorderRadius`.
 
 The next milestone is `v1.0.0` = pub.dev publishable. Remaining API work and
-polish items are tracked in `docs/TODO.md` (English) and `docs/TODO.ja.md`
+polish items are tracked in `doc/TODO.md` (English) and `doc/TODO.ja.md`
 (Japanese).
 
 The developer-facing API reference lives in `DOCUMENT.md`. `README.md` is the
@@ -226,5 +226,5 @@ When working in this repository:
 - Add tests around fallback behavior, valid values, invalid values, and example
   usage.
 - For the user-facing API reference, read `DOCUMENT.md` rather than guessing.
-- For the next planned work and the `v1.0.0` API list, check `docs/TODO.md`
+- For the next planned work and the `v1.0.0` API list, check `doc/TODO.md`
   first.
