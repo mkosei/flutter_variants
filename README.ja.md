@@ -2,6 +2,8 @@
 
 日本語 | [English](README.md)
 
+[![pub package](https://img.shields.io/pub/v/flutter_variants.svg)](https://pub.dev/packages/flutter_variants)
+
 `flutter_variants` は、FlutterアプリのUIバリアントを安全に差し替えるためのSDKです。
 
 テキスト、画像、色、余白、表示/非表示などの「見た目の値」だけを差し替えます。画面構造、ナビゲーション、ボタンの処理、API呼び出し、認証、決済、ビジネスロジックはFlutterアプリ側に残します。

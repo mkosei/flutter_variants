@@ -2,6 +2,8 @@
 
 [日本語](README.ja.md) | English
 
+[![pub package](https://img.shields.io/pub/v/flutter_variants.svg)](https://pub.dev/packages/flutter_variants)
+
 A Flutter SDK for safe UI variants.
 
 `flutter_variants` lets you change approved UI values such as text, labels, and
