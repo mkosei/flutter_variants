@@ -1,7 +1,18 @@
 name: flutter_variants
-description: "A new Flutter package project."
-version: 0.0.1
-homepage:
+description: >-
+  Type-safe UI variants for Flutter. Update text, colors, images, and design
+  slots from any JSON URL. Self-hosted, fallback-safe, no remote logic.
+version: 0.1.0
+repository: https://github.com/mkosei/flutter_variants
+homepage: https://github.com/mkosei/flutter_variants
+issue_tracker: https://github.com/mkosei/flutter_variants/issues
+
+topics:
+  - remote-config
+  - feature-flags
+  - server-driven-ui
+  - ui-variants
+  - self-hosted
 
 environment:
   sdk: ^3.12.0
