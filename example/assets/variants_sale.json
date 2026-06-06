@@ -1,0 +1,91 @@
+{
+  "home.hero.title": {
+    "type": "text",
+    "value": "Spring Sale — up to 40% off"
+  },
+  "home.hero.subtitle": {
+    "type": "text",
+    "value": "Selected items only. Ends March 31."
+  },
+  "home.hero.background": {
+    "type": "color",
+    "value": "#FEE2E2"
+  },
+  "home.hero.padding": {
+    "type": "edgeInsets",
+    "value": 28
+  },
+  "home.hero.titleStyle": {
+    "type": "textStyle",
+    "value": {
+      "fontSize": 26,
+      "fontWeight": "bold",
+      "color": "#991B1B"
+    }
+  },
+  "home.banner.visible": {
+    "type": "bool",
+    "value": true
+  },
+  "home.banner.text": {
+    "type": "text",
+    "value": "Sign up today and get a $5 welcome coupon."
+  },
+  "home.banner.background": {
+    "type": "color",
+    "value": "#FEF3C7"
+  },
+  "home.products.section_title": {
+    "type": "text",
+    "value": "On sale now"
+  },
+  "home.product.tee.title": {
+    "type": "text",
+    "value": "Classic Tee"
+  },
+  "home.product.tee.price": {
+    "type": "text",
+    "value": "$24  →  $14"
+  },
+  "home.product.cap.title": {
+    "type": "text",
+    "value": "Knit Cap"
+  },
+  "home.product.cap.price": {
+    "type": "text",
+    "value": "$18  →  $10"
+  },
+  "home.product.bag.title": {
+    "type": "text",
+    "value": "Canvas Bag"
+  },
+  "home.product.bag.price": {
+    "type": "text",
+    "value": "$32  →  $19"
+  },
+  "home.cta.label": {
+    "type": "text",
+    "value": "Shop the sale"
+  },
+  "home.cta.background": {
+    "type": "color",
+    "value": "#DC2626"
+  },
+  "home.cta.padding": {
+    "type": "edgeInsets",
+    "value": {
+      "left": 28,
+      "top": 16,
+      "right": 28,
+      "bottom": 16
+    }
+  },
+  "home.card.radius": {
+    "type": "borderRadius",
+    "value": 16
+  },
+  "home.section.spacing": {
+    "type": "spacing",
+    "value": 24
+  }
+}

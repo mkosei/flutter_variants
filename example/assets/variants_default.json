@@ -1,0 +1,91 @@
+{
+  "home.hero.title": {
+    "type": "text",
+    "value": "Today's picks"
+  },
+  "home.hero.subtitle": {
+    "type": "text",
+    "value": "Curated for you, refreshed every morning."
+  },
+  "home.hero.background": {
+    "type": "color",
+    "value": "#EEF2FF"
+  },
+  "home.hero.padding": {
+    "type": "edgeInsets",
+    "value": 20
+  },
+  "home.hero.titleStyle": {
+    "type": "textStyle",
+    "value": {
+      "fontSize": 22,
+      "fontWeight": "bold",
+      "color": "#1F2937"
+    }
+  },
+  "home.banner.visible": {
+    "type": "bool",
+    "value": false
+  },
+  "home.banner.text": {
+    "type": "text",
+    "value": ""
+  },
+  "home.banner.background": {
+    "type": "color",
+    "value": "#FFF7ED"
+  },
+  "home.products.section_title": {
+    "type": "text",
+    "value": "Recommended"
+  },
+  "home.product.tee.title": {
+    "type": "text",
+    "value": "Classic Tee"
+  },
+  "home.product.tee.price": {
+    "type": "text",
+    "value": "$24"
+  },
+  "home.product.cap.title": {
+    "type": "text",
+    "value": "Knit Cap"
+  },
+  "home.product.cap.price": {
+    "type": "text",
+    "value": "$18"
+  },
+  "home.product.bag.title": {
+    "type": "text",
+    "value": "Canvas Bag"
+  },
+  "home.product.bag.price": {
+    "type": "text",
+    "value": "$32"
+  },
+  "home.cta.label": {
+    "type": "text",
+    "value": "Browse all"
+  },
+  "home.cta.background": {
+    "type": "color",
+    "value": "#4F46E5"
+  },
+  "home.cta.padding": {
+    "type": "edgeInsets",
+    "value": {
+      "left": 24,
+      "top": 14,
+      "right": 24,
+      "bottom": 14
+    }
+  },
+  "home.card.radius": {
+    "type": "borderRadius",
+    "value": 12
+  },
+  "home.section.spacing": {
+    "type": "spacing",
+    "value": 20
+  }
+}

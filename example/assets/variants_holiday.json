@@ -1,0 +1,92 @@
+{
+  "home.hero.title": {
+    "type": "text",
+    "value": "Happy Holidays"
+  },
+  "home.hero.subtitle": {
+    "type": "text",
+    "value": "Free gift wrap on every order this week."
+  },
+  "home.hero.background": {
+    "type": "color",
+    "value": "#064E3B"
+  },
+  "home.hero.padding": {
+    "type": "edgeInsets",
+    "value": 28
+  },
+  "home.hero.titleStyle": {
+    "type": "textStyle",
+    "value": {
+      "fontSize": 28,
+      "fontWeight": "bold",
+      "color": "#FDE68A",
+      "fontStyle": "italic"
+    }
+  },
+  "home.banner.visible": {
+    "type": "bool",
+    "value": true
+  },
+  "home.banner.text": {
+    "type": "text",
+    "value": "Order by Dec 20 for delivery before the holidays."
+  },
+  "home.banner.background": {
+    "type": "color",
+    "value": "#FEF3C7"
+  },
+  "home.products.section_title": {
+    "type": "text",
+    "value": "Holiday gift picks"
+  },
+  "home.product.tee.title": {
+    "type": "text",
+    "value": "Winter Tee"
+  },
+  "home.product.tee.price": {
+    "type": "text",
+    "value": "$24"
+  },
+  "home.product.cap.title": {
+    "type": "text",
+    "value": "Holiday Cap"
+  },
+  "home.product.cap.price": {
+    "type": "text",
+    "value": "$22"
+  },
+  "home.product.bag.title": {
+    "type": "text",
+    "value": "Gift Tote"
+  },
+  "home.product.bag.price": {
+    "type": "text",
+    "value": "$36"
+  },
+  "home.cta.label": {
+    "type": "text",
+    "value": "Shop holiday gifts"
+  },
+  "home.cta.background": {
+    "type": "color",
+    "value": "#B45309"
+  },
+  "home.cta.padding": {
+    "type": "edgeInsets",
+    "value": {
+      "left": 24,
+      "top": 14,
+      "right": 24,
+      "bottom": 14
+    }
+  },
+  "home.card.radius": {
+    "type": "borderRadius",
+    "value": 20
+  },
+  "home.section.spacing": {
+    "type": "spacing",
+    "value": 24
+  }
+}
